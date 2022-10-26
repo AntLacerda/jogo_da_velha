@@ -6,41 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo da Velha</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles&display=swap');
+
+        @keyframes pan {
+            100% {
+                background-position: 15% 50%;
+            }
+        }
+
+        body{
+            background-image: url("papel_de_parede.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            animation: pan 6s infinite alternate linear;
+        }
+
         #camp1{
-            border-right: 1px solid black;
-            border-bottom: 1px solid black;
+            border-right: 6px solid #c4ff00;
+            border-bottom: 6px solid #c4ff00;
+            
         }
 
         #camp2{
-            border-bottom: 1px solid black;
+            border-bottom: 6px solid #c4ff00;
 
         }
 
         #camp3{
-            border-left: 1px solid black;
-            border-bottom: 1px solid black;
+            border-left: 6px solid #c4ff00;
+            border-bottom: 6px solid #c4ff00;
         }
 
         #camp4{
-            border-right: 1px solid black;
-            border-bottom: 1px solid black;
+            border-right: 6px solid #c4ff00;
+            border-bottom: 6px solid #c4ff00;
         }
 
         #camp5{
-            border-bottom: 1px solid black;
+            border-bottom: 6px solid #c4ff00;
         }
 
         #camp6{
-            border-left: 1px solid black;
-            border-bottom: 1px solid black;
+            border-left: 6px solid #c4ff00;
+            border-bottom: 6px solid #c4ff00;
         }
 
         #camp7{
-            border-right: 1px solid black;
+            border-right: 6px solid #c4ff00;
         }
 
         #camp9{
-            border-left: 1px solid black;
+            border-left: 6px solid #c4ff00;
         }
 
         .alinhamento{
@@ -49,19 +65,66 @@
         }
 
         .alinhamento div{
-            width: 50px;
-            height: 50px;
+            width: 90px;
+            height: 90px;
             cursor: pointer;
             text-align: center;
+            background-size: 50px;
+            background-repeat: no-repeat;
+            background-position: center;
+            
+        }
 
+        .alinhamento_maior{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .cabecalho{
+            background-color: #818181;
+            padding: 30px;
+            color: #c4ff00;
+            text-align: center;
+            font-size: 20px;
+            font-family: 'Fuzzy Bubbles', cursive;
+            font-weight: bold;
+        }
+
+        #botao_reset{
+            background-color: #c4ff00;
+            color: #818181;
+            width: 100px;
+            height: 30px;
+            border-radius: 5px;
+            text-align: center;
+            padding-top: 15px;
+        }
+
+        .linhaDaVitoria{
+            width: 270px;
+            height: 10px;
+            border-radius: 20px;
+            background-color: #c4ff00;
+            position: absolute;
+            rotate: 0deg;
+            top: 0px;
+            left: 0px;
         }
 
 
 
     </style>
+    <link rel="stylesheet" href="reset.css">
 </head>
 <body>
-    <div>
+    <header>
+        <div class="cabecalho">
+            <h1>Jogo da Velha</h1>
+        </div> 
+    </header>
+    <div class="alinhamento_maior">
         <div class="alinhamento">
             <div id="camp1" onclick="posicao(0,0,this)"></div>
             <div id="camp2" onclick="posicao(0,1,this)"></div>
@@ -78,6 +141,7 @@
             <div id="camp9" onclick="posicao(2,2,this)"></div>
         </div>
     </div>
+    <div id="botao_reset" onclick="resetar()">REINICIAR</div>
 
 
 
@@ -87,6 +151,9 @@
         let cont=0;
 
         let mat = [[], [], []];
+
+        let linha_da_vitoria = document.createElement("div");
+        let corpo = document.querySelector("body");
 
         for(k=0;k<3;k++){
             for(i=0;i<3;i++){
@@ -99,13 +166,13 @@
         const posicao = (lin, col, obj) => {
             //alert("Acessou!");
             if(jogador===1){
-                obj.innerHTML = "X";
+                obj.style.backgroundImage = "url(letter-x.png)";
                 jogador++;
                 mat[lin][col] = 1;
                 conferencia(1);
             }
             else if(jogador===2){
-                obj.innerHTML = "O";
+                obj.style.backgroundImage = "url(letter-o.png)";
                 jogador--;
                 mat[lin][col] = 2;
                 conferencia(2);
@@ -115,25 +182,31 @@
         const conferencia = (num) => {
             if(mat[0][0]===num && mat[0][1]===num && mat[0][2]===num){
                 if(num===1){
+                    vitoria(150, 50, 0);
                     console.log("Parabéns jogador { X }, você venceu!");
                 }
                 else if(num===2){
+                    vitoria(150, 50);
                     console.log("Parabéns jogador { O }, você venceu!");
                 }
             }
             else if(mat[1][0]===num && mat[1][1]===num && mat[1][2]===num){
                 if(num===1){
+                    vitoria(245, 50, 0);
                     console.log("Parabéns jogador { X }, você venceu!");
                 }
                 else if(num===2){
+                    vitoria(245, 50, 0);
                     console.log("Parabéns jogador { O }, você venceu!");
                 }
             }
             else if(mat[2][0]===num && mat[2][1]===num && mat[2][2]===num){
                 if(num===1){
+                    vitoria(340, 50, 0);
                     console.log("Parabéns jogador { X }, você venceu!");
                 }
                 else if(num===2){
+                    vitoria(340, 50, 0);
                     console.log("Parabéns jogador { O }, você venceu!");
                 }
             }
@@ -142,25 +215,31 @@
 
             else if(mat[0][0]===num && mat[1][0]===num && mat[2][0]===num){
                 if(num===1){
+                    vitoria(245, -43, 90);
                     console.log("Parabéns jogador { X }, você venceu!");
                 }
                 else if(num===2){
+                    vitoria(245, -43, 90);
                     console.log("Parabéns jogador { O }, você venceu!");
                 }
             }
             else if(mat[0][1]===num && mat[1][1]===num && mat[2][1]===num){
                 if(num===1){
+                    vitoria(245, 53, 90);
                     console.log("Parabéns jogador { X }, você venceu!");
                 }
                 else if(num===2){
+                    vitoria(245, 53, 90);
                     console.log("Parabéns jogador { O }, você venceu!");
                 }
             }
             else if(mat[0][2]===num && mat[1][2]===num && mat[2][2]===num){
                 if(num===1){
+                    vitoria(245, 150, 90);
                     console.log("Parabéns jogador { X }, você venceu!");
                 }
                 else if(num===2){
+                    vitoria(245, 150, 90);
                     console.log("Parabéns jogador { O }, você venceu!");
                 }
             }
@@ -168,17 +247,21 @@
 
             else if(mat[0][0]===num && mat[1][1]===num && mat[2][2]===num){
                 if(num===1){
+                    vitoria(245, 10, 48);
                     console.log("Parabéns jogador { X }, você venceu!");
                 }
                 else if(num===2){
+                    vitoria(245, 10, 48);
                     console.log("Parabéns jogador { O }, você venceu!");
                 }
             }
             else if(mat[0][2]===num && mat[1][1]===num && mat[2][0]===num){
                 if(num===1){
+                    vitoria(245, 10, 136);
                     console.log("Parabéns jogador { X }, você venceu!");
                 }
                 else if(num===2){
+                    vitoria(245, 10, 136);
                     console.log("Parabéns jogador { O }, você venceu!");
                 }
             }
@@ -191,6 +274,36 @@
                 }
             }
             cont++;
+        }
+
+        const resetar = () => {
+            for(k=0;k<3;k++){
+                for(i=0;i<3;i++){
+                    mat[k][i] = 0;
+                }
+            }
+
+            jogador = 1;
+            cont = 0;
+
+            for(k=1;k<10;k++){
+                let caixa123 = document.getElementById(`camp${k}`);
+                caixa123.style.backgroundImage = "none"; 
+            }
+
+            corpo.removeChild(linha_da_vitoria);
+        }
+
+        const vitoria = (altura, largura, angulo) => {
+            linha_da_vitoria = document.createElement("div");
+            linha_da_vitoria.style.top = `${altura}px`;
+            linha_da_vitoria.style.left = `${largura}px`;
+            linha_da_vitoria.style.rotate = `${angulo}deg`;
+            if(angulo===48||angulo===136){
+                linha_da_vitoria.style.width = "350px";
+            }
+            linha_da_vitoria.classList.add("linhaDaVitoria");
+            corpo.appendChild(linha_da_vitoria);
         }
 
 
